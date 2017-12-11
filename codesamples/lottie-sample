@@ -1,0 +1,83 @@
+/**
+ * Sample React Native App
+ * https://github.com/facebook/react-native
+ * @flow
+ */
+
+import React, { Component } from 'react';
+import {
+  AppRegistry,
+  StyleSheet,
+  Dimensions
+} from 'react-native';
+import { Animated } from 'react-native';
+import Animation from 'lottie-react-native';
+import {
+  Container,
+  Content 
+} from 'native-base';
+
+
+export default class RNLottie extends Component {
+
+  constructor(props){
+    super(props);
+    this.state = {
+      progress: new Animated.Value(0),
+      bgprogress: new Animated.Value(0)
+    };
+  }
+
+  componentDidMount() {
+    Animated.timing(this.state.bgprogress, {
+        toValue: .25,
+        duration: 5000,
+      }, {
+      useNativeDriver: true
+    }).start()
+    Animated.timing(this.state.progress, {
+      toValue: 1,
+      duration: 5000,
+    }, {
+      useNativeDriver: true
+    }).start();
+  }
+
+
+  render() {
+    const { width, height } = Dimensions.get('window');
+    return (
+      <Container>
+        <Content>
+          <Animation
+            style={styles.logo}
+            source={require('./assets/react-logo.json')}
+            progress={this.state.progress}
+          />
+          <Animation style={[{ width, height }, styles.bg]}
+            source={require('./assets/background.json')}
+            progress={this.state.bgprogress}
+          />
+        </Content>
+      </Container>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  logo: {
+    width: 400,
+    height: 400,
+    position: 'absolute',
+    top: 40,
+    zIndex: 1
+  },
+  bg: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+    zIndex: 0
+  }
+});
+
+AppRegistry.registerComponent('RNLottie', () => RNLottie);
